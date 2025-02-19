@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to PDF Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #preview { 
+            display: grid; 
+            grid-template-columns: repeat(4, 6.4cm); 
+            gap: 10px; 
+            justify-content: center; 
+            margin-top: 20px;
+        }
+        .image-container { position: relative; }
+        .image-container img { width: 6.4cm; height: 8.9cm; }
+        .copy-count { width: 50px; }
+    </style>
+</head>
+<body>
+    <h2>Image to PDF Generator</h2>
+    <input type="file" id="imageInput" multiple accept="image/*">
+    <select id="imageSize">
+        <option value="64x89">Standard TCG (6.4cm x 8.9cm)</option>
+        <option value="63x88">Japanese TCG (6.3cm x 8.8cm)</option>
+        <option value="70x120">Tarot (7.0cm x 12.0cm)</option>
+    </select>
+    <button onclick="generatePDF()">Generate PDF</button>
+    <div id="preview"></div>
+    
+    <script>
+        let images = [];
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            images = [];
+            document.getElementById('preview').innerHTML = '';
+            Array.from(event.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    images.push({ src: img.src, copies: 1 });
+                    const container = document.createElement('div');
+                    container.classList.add('image-container');
+                    container.innerHTML = `<img src="${img.src}"><input type='number' class='copy-count' value='1' min='1' onchange='updateCopies(${images.length - 1}, this.value)'>`;
+                    document.getElementById('preview').appendChild(container);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function updateCopies(index, value) {
+            images[index].copies = parseInt(value) || 1;
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const sizeMap = {
+                "64x89": { width: 64, height: 89 },
+                "63x88": { width: 63, height: 88 },
+                "70x120": { width: 70, height: 120 }
+            };
+            const selectedSize = document.getElementById('imageSize').value;
+            const imageSize = sizeMap[selectedSize];
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const imagesPerRow = Math.floor(pageWidth / imageSize.width);
+            let x = 3, y = 3;
+            images.forEach(({ src, copies }) => {
+                for (let i = 0; i < copies; i++) {
+                    if (x + imageSize.width > pageWidth) {
+                        x = 3;
+                        y += imageSize.height + 3;
+                    }
+                    if (y + imageSize.height > pageHeight) {
+                        doc.addPage();
+                        x = 3;
+                        y = 3;
+                    }
+                    doc.addImage(src, 'JPEG', x, y, imageSize.width, imageSize.height);
+                    x += imageSize.width + 3;
+                }
+            });
+            doc.save('images.pdf');
+        }
+    </script>
+</body>
+</html>
