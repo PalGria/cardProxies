@@ -1,10 +1,18 @@
-const SizeSelector = ({ options, selectedValue, onChange }) => (
+import { SizeOption } from '../types/types'
+
+interface SizeSelectorProps {
+  options: SizeOption[]
+  selectedValue: string
+  onChange: (value: string) => void
+}
+
+const SizeSelector = ({ options, selectedValue, onChange } : SizeSelectorProps) => (
   <select
     value={selectedValue}
     onChange={(e) => onChange(e.target.value)}
     className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
   >
-    {options.map(option => (
+    {options.map((option : SizeOption) => (
       <option key={option.value} value={option.value}>
         {option.label}
       </option>

@@ -1,18 +1,26 @@
-const FileUploader = ({ onUpload }) => {
-  const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files)
-    const newImages = await Promise.all(
-      files.map(file => new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.onload = (e) => resolve({
-          src: e.target.result,
-          copies: 1,
-          id: Math.random().toString(36).substr(2, 9)
-        })
-        reader.readAsDataURL(file)
-      }))
-    )
-    onUpload(newImages)
+import { Image } from '../types/types'
+
+interface FileUploaderProps {
+  onUpload: (images: Image[]) => void
+}
+
+const FileUploader = ({ onUpload }: FileUploaderProps) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e?.target?.files) {
+      const files = Array.from(e.target.files);
+      const newImages = await Promise.all(
+        files.map(file => new Promise<Image>((resolve) => {
+          const reader = new FileReader()
+          reader.onload = (e) => resolve({
+            src: e?.target?.result || '',
+            copies: 1,
+            id: Math.random().toString(36).substr(2, 9)
+          })
+          reader.readAsDataURL(file)
+        }))
+      )
+      onUpload(newImages)
+    }
   }
 
   return (

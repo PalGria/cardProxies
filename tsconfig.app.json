@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "utils/pdfGenerator.tsx"]
+  "include": ["src", "src/utils/pdfGenerator.tsx"]
 }

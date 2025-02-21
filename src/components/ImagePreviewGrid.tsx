@@ -1,10 +1,26 @@
 import ImagePreviewItem from './ImagePreviewItem'
+import { Image } from '../types/types'
 
-const ImagePreviewGrid = ({ images, setImages }) => {
-  const updateCopies = (id, copies) => {
-    setImages(prev => prev.map(img => 
-      img.id === id ? { ...img, copies: Math.max(1, copies) } : img
-    ))
+interface ImagePreviewGridProps {
+  images: Image[]
+  setImages: React.Dispatch<React.SetStateAction<Image[]>>; // ✅ Corrected type
+}
+
+const ImagePreviewGrid = ({ images, setImages }: ImagePreviewGridProps) => {
+
+  const updateCopies = (id: string, copies: number) => {
+    if (copies < 1) { removeImage(id) }
+    else {
+      setImages((prev: Image[]) =>
+        prev.map((img: Image) =>
+          img.id === id ? { ...img, copies: Math.max(1, copies) } : img
+        )
+      )
+    }
+  }
+
+  const removeImage = (id: string) => {
+    setImages((prev: Image[]) => prev.filter((img: Image) => img.id !== id))
   }
 
   if (!images.length) return null
@@ -18,6 +34,7 @@ const ImagePreviewGrid = ({ images, setImages }) => {
             key={image.id}
             image={image}
             onCopiesChange={updateCopies}
+            onRemove={removeImage}
           />
         ))}
       </div>
