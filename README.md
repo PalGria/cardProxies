@@ -1,50 +1,114 @@
-# React + TypeScript + Vite
+# cardproxi.es
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+cardproxi.es is a web app for turning card images into clean, print-ready proxy PDFs in a few clicks.
 
-Currently, two official plugins are available:
+Live product: https://cardproxi.es  
+Hosting: Netlify
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## What It Does
 
-## Expanding the ESLint configuration
+- Upload one or many card images
+- Select target card format:
+  - Standard TCG: 64 x 89 mm
+  - Japanese TCG: 63 x 88 mm
+  - Tarot: 70 x 120 mm
+- Set the number of copies per card
+- Remove cards from the batch
+- Export a multi-page PDF with automatic card placement
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Why This Project Is Valuable
 
-- Configure the top-level `parserOptions` property like this:
+This product demonstrates end-to-end frontend product development:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- Product thinking: practical tool for a real card game workflow
+- UI engineering: fast and simple upload-to-export flow
+- Browser file handling: image ingestion and state management
+- PDF generation logic: custom sizing, spacing, and pagination
+- Deployment: production hosting on Netlify with a custom domain
+
+## Tech Stack
+
+- React 19
+- TypeScript
+- Vite 6
+- Tailwind CSS 4
+- jsPDF
+
+## Local Development
+
+### Prerequisites
+
+- Node.js 18+ (LTS recommended)
+- npm
+
+### Install Dependencies
+
+```bash
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Start Dev Server
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm run dev
 ```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Preview Build
+
+```bash
+npm run preview
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+## Usage
+
+1. Upload card images.
+2. Choose card size.
+3. Adjust copy counts in preview.
+4. Click Generate PDF.
+5. Print cards.pdf.
+
+## Architecture Snapshot
+
+```text
+src/
+  components/
+    FileUploader.tsx
+    ImagePreviewGrid.tsx
+    ImagePreviewItem.tsx
+    SizeSelector.tsx
+  utils/
+    pdfGenerator.tsx
+  types/
+    types.tsx
+  App.tsx
+```
+
+## For Hiring Teams
+
+If you are evaluating frontend candidates, this project highlights:
+
+- Clean component decomposition
+- Typed React patterns with TypeScript
+- Practical UX decisions for throughput workflows
+- Utility-focused business logic separated from UI
+- Shipping discipline from local development to production deployment
+
+## Contact
+
+You can contact me on: 
+
+- Portfolio: https://palgria.es
+- LinkedIn: https://linkedin.com/in/jmpa
+- Email: jmpalaualegria@gmail.com
